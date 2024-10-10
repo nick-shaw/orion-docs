@@ -4,7 +4,6 @@ USER MANUAL V2.0
 Revision 1
 
 # Introduction
-![](images/grad_bar.png)
 
 ## The ORION-CONVERT™ algorithm
 
@@ -29,15 +28,13 @@ The ORION-CONVERT™ user interface makes it simple to set up two conversions as
 
 # The Interface (CONFIG)
 
-![](images/grad_bar.png)
-
 ## Lock Controls
+![](images/grad_bar.png)
 
 The controls can be locked to prevent accidental changing of parameters once selected. 
 
-![](images/grad_bar.png)
-
 ## Input Compression/Expansion
+![](images/grad_bar.png)
 
 Either compression or expansion will be available, depending on whether the output format covers more or less of the dynamic range than the input format.
 
@@ -56,17 +53,15 @@ This controls the amount of compression in down-conversion and expansion in up-c
 
 > *Note: For S-Log3 formats, the IRE values are relative to the full 0-1023 range of the signal, whereas for other formats they are relative to the 64-940 narrow range.*
 
-![](images/grad_bar.png)
-
 ## Conversion
+![](images/grad_bar.png)
 
 Here the user can choose the input and output format of the conversion, including choosing between different primaries where appropriate. Matched input and output formats may be selected in order to apply ORION compression, look processing or limiting without conversion.  
     
 After selecting settings for a conversion, if the direction of the conversion is reversed, the parameters relating to input and output compression are swapped to generate an absolute mathematical inverse. This way, a visually lossless roundtrip is possible due to the high-precision calculations used by ORION-CONVERT™.
 
-![](images/grad_bar.png)
-
 ## Mode: Display light and Scene light
+![](images/grad_bar.png)
 
 There’s a great deal of confusion about the use of these two different kinds of conversions described in BT.2390.
 
@@ -79,32 +74,30 @@ There’s a great deal of confusion about the use of these two different kinds o
  *These conversions would be used when matching the appearance of the content, as seen by a camera, is the intended process. For example, when using the SDR output of a camera (as camera splits/isos, etc...) that can simultaneously produce SDR and HDR, we want the HDR programme (after conversion to SDR) to match in the best way possible\*.*  
     
 *\* This depends very much on the camera manufacturer as some have creative tools independent of HDR and SDR outputs. Matching configuration settings to the HDR converted signal 'look' for the SDR output must be found and locked.*  
-    
+
+## HDR and SDR Reference points
 ![](images/grad_bar.png)
 
-## HDR Peak
+This controls the HDR and SDR 'anchor points'. At the default settings of 75 and 100, for example for an HLG to SDR conversion, if no compression or expansion is applied, 75% HLG will be mapped to exactly 100% SDR (direct mapping). If any compression or expansion is applied, and these values are above the ***Knee*** points, the correspondence will be shifted.
 
-This is the peak luminance (referred to as LW in ITU-R BT.2100) in nits of the 'virtual HLG display' used in conversion calculations. This is normally left at the default value of 1000.
+## HDR Peak
+![](images/grad_bar.png)
+
+This is the peak luminance (referred to as L<sub>w</sub> in ITU-R BT.2100) in nits of the 'virtual HLG display' used in conversion calculations. This is normally left at the default value of 1000.
 
 The principal effect of this setting is to control the gamma of the HLG OOTF as defined in ITU-R BT.2100. In PQ conversions this value also controls how much of the 10,000 nit range which can be represented by PQ will be mapped to the destination format. In PQ conversions, when this value is altered, the PQ ***Knee*** and reference point will also change to reflect this.
 
 > Note: This value is not used in scene-light conversions.
 
-![](images/grad_bar.png)
-
-## HDR and SDR Reference points
-
-This controls the HDR and SDR 'anchor points'. At the default settings of 75 and 100, for example for an HLG to SDR conversion, if no compression or expansion is applied, 75% HLG will be mapped to exactly 100% SDR (direct mapping). If any compression or expansion is applied, and these values are above the ***Knee*** points, the correspondence will be shifted.
-
-![](images/grad_bar.png)
-
 ## Log Offset
+![](images/grad_bar.png)
 
 When a log format (S-Log3 or LogC3) is selected as the input or output format, an additional ***Log Offset*** control is made available. This controls the exposure relationship in stops between the log signal and other formats. A ***Log Offset*** of zero will map the standard mid grey value for the log format to the equivalent of 38% HLG. Some cameras which offer S-Log3 and HLG output apply an exposure offset between the signals. Our testing indicated that this was about \-0.7 stops for the camera we tested, but you should test your own setup if an exact match is required.
 
 When this value is changed, the ***Ref*** and ***Knee*** value for the log signal will also be modified to reflect this.
 
 ## Look
+![](images/grad_bar.png)
 
 As well as technical conversion, the ORION-CONVERT™ plugin provides creative look controls. Preset looks can be loaded to emulate those provided in certain cameras, and if enabled by your licence, looks can be saved as ***.olook*** files to be shared with other users.
 
@@ -128,9 +121,8 @@ Exposure modification in stops.
 
 Saturation control.
 
-![](images/grad_bar.png)
-
 ## Output Compression/Expansion
+![](images/grad_bar.png)
 
 Either compression or expansion will be available, depending on whether the output format covers more or less dynamic range than the input format.  
     
@@ -147,9 +139,15 @@ This controls the amount of compression in down-conversion and expansion in up-c
 
 > *Note: For S-Log3 formats, the IRE values are relative to the full 0-1023 range of the signal, whereas for other formats they are relative to the 64-940 narrow range.*
 
+## Gamma Compensation
 ![](images/grad_bar.png)
 
+This switch will enable conversion using the optional gamma adjustment, described in ITU-R BT.2446-1 section 5.1.2, to create a closer perceptual match to the HDR when viewing converted SDR at 100 nits. Without the use of this compensation, some users choose to set their SDR monitors to 200 nits.  
+    
+A custom shadow compression curve is included, to compensate for the lifted blacks that the ITU-suggested formula for this method can produce.  g)
+
 ## Clamping
+![](images/grad_bar.png)
 
 Internally the result of the conversion is unclamped float, meaning that even HDR values that cannot be represented on an SDR display after conversion, will be converted to SDR values outside the displayable range. When outputting over SDI, it is necessary to limit the range of the output. This control applies a clamp to the output R′G′B′ values.
 
@@ -161,17 +159,8 @@ Options:
 -  \-5 to 105 IRE (EBU R 103 preferred range)  
 - 0 to 100 IRE  
 
-![](images/grad_bar.png)
-
-## Gamma Compensation
-
-This switch will enable conversion using the optional gamma adjustment, described in ITU-R BT.2446-1 section 5.1.2, to create a closer perceptual match to the HDR when viewing converted SDR at 100 nits. Without the use of this compensation, some users choose to set their SDR monitors to 200 nits.  
-    
-A custom shadow compression curve is included, to compensate for the lifted blacks that the ITU-suggested formula for this method can produce.  
-    
-![](images/grad_bar.png)
-
 ## P3 Limit
+![](images/grad_bar.png)
 
 Most consumer HDR TVs on the market at this time are only capable of displaying up to the P3-D65 colour gamut. It is a common practice in the post-production of HDR-graded content, to limit the image to P3-D65 so that what is seen on the master reference monitor matches what the consumer is able to see.
 
@@ -188,9 +177,8 @@ The ORION-CONVERT™ P3 limiter uses an advanced luminance-preserving approach.
 
 P3 limiting is only available for conversions whose output is a display-referred HDR format (PQ or HLG) and will be applied after the conversion. 
 
+## Conversion Setup
 ![](images/grad_bar.png)
-
-## **Conversion Setup:**
 
 Thanks to the core design of the ORION-CONVERT™ algorithm, it is very easy and fast to create a conversion roundtrip (up-conversion and down-conversion) in just one go.
 
@@ -208,9 +196,8 @@ Graphics are normally\* converted without any highlight compression or expansion
 
 \* some creative approaches to graphic content creation can be used to enhance or allow for a more 'HDR look' after conversion, such as using slightly lower RGB values for graphic text to leave room for specular highlights in the graphics. These can then be expanded once the graphics are converted.
 
+## HDR Mastering Setup
 ![](images/grad_bar.png)
-
-## **HDR Mastering Setup:**
 
 When using ORION-CONVERT™ as an HDR mastering tool, a no-conversion (HLG to HLG or PQ to PQ) can be selected in the conversion drop-down menus.  
     
