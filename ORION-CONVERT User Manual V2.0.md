@@ -64,17 +64,8 @@ After selecting settings for a conversion, if the direction of the conversion is
 ## Mode: Display light and Scene light
 ![](images/grad_bar.png)
 
-There’s a great deal of confusion about the use of these two different kinds of conversions described in BT.2390.
-
-> Display-referred mapping is used when the goal is to preserve the colours and relative tones seen on an SDR BT.709 or BT.2020 display, when the content is shown on a BT.2100 HDR display. An example of which is the inclusion of SDR graded content within an HDR programme. 
-        
-*This type of conversion might be used for graphics insertion, for example. These elements are mostly designed in an sRGB environment, so to preserve this creative intent, we want to represent these elements exactly as they were seen at the time of their creation.*  
-        
-> Scene-referred mapping is used where the source is a direct SDR camera output and the goal is to match the colours and tones of a BT.2100 HDR camera. An example of which is the inter-mixing of SDR and HDR cameras within a live television production.
-    
-*These conversions would be used when matching the appearance of the content, as seen by a camera, is the intended process. For example, when using the SDR output of a camera (as camera splits/isos, etc...) that can simultaneously produce SDR and HDR, we want the HDR programme (after conversion to SDR) to match in the best way possible\*.*  
-    
-*\* This depends very much on the camera manufacturer as some have creative tools independent of HDR and SDR outputs. Matching configuration settings to the HDR converted signal 'look' for the SDR output must be found and locked.*  
+Here the mode of conversion can be selected, performing calculations in either scene or display light. For some types of conversion, the mode is fixed, due to the formats being converted. For others, it is user-selectable.
+For more details, see [Appendix A](#appendix-a).
 
 ## HDR and SDR Reference points
 ![](images/grad_bar.png)
@@ -204,6 +195,52 @@ When using ORION-CONVERT™ as an HDR mastering tool, a no-conversion (HLG to HL
 By using the ***Input Compression*** controls, the user can roll off any highlights beyond the range that a target consumer TV will be able to display; for example, super white areas  (109% IRE) in HLG or different peak brightnesses when in PQ (2000 nit to 1000 nit, etc.) and adjust the signal to the delivery range desired.  
     
 In this mode, a P3 limiter may be applied, if required by the delivery spec, for example.  
+
+# Appendix A
+![](images/grad_bar.png)
+
+There’s a great deal of confusion about the use of the two types of conversion described in BT.2390. It is perhaps useful to start with some definitions.
+
+## Scene-referred
+![](images/grad_bar.png)
+
+A scene-referred encoding is one where there is a defined mathematical relationship to the original scene light. Camera log encodings, such as S-Log3 and LogC3 are scene-referred (strictly relative scene-referred, since without knowledge of the camera’s exposure setting the absolute scene luminance cannot be inferred).
+
+## Display-referred
+![](images/grad_bar.png)
+
+A display referred encoding is one where there is a defined mathematical relationship to the light produced by a display. PQ is an absolute display-referred encoding, as a given PQ code value specifies the exact luminance produced by a reference display. BT.1886 is relative display-referred, since the luminance produced is relative to the peak luminance of the display.
+
+## Conversions
+![](images/grad_bar.png)
+
+A conversion to or from PQ can only ever be performed in display light, since it is a representation in a different format of the absolute luminance produced by the PQ signal.
+A conversion to or from a camera log format can only ever be performed in scene light, since these formats do not define the display light produced.
+
+The complication arises with HLG which is in some senses both scene and display-referred. If an HLG camera produces a signal which is exactly as specified in BT.2100, the scene luminance (relative to diffuse white) can be inferred from that signal. In reality, shading and other camera adjustments mean the signal diverges in an unknown way from the pure standard for creative and technical reasons, so scene luminance cannot be inferred. Many argue that HLG is in fact display referred, since BT.2100 describes the relationship between the HLG signal and a 1000 nit reference display, and a reference display should not diverge from the standard.
+
+SDR too has a relationship to scene light defined in Rec.709, and a relationship to display light defined in BT.1886. Again, camera adjustments will break the scene light relationship.
+
+A display light conversion between HLG and SDR aims to match the appearance of the image on the HDR and SDR displays. If gamma compensation is not applied, the luminance ratios on the two displays are identical below the roll-off knee points. Gamma compensation diverges slightly from this with the aim of improving the perceptual match at a different absolute luminance, but the aim is still matching of the two displays.
+
+A scene light conversion between HLG and SDR aims to produce a match between the signals which would have been produced by an HLG and SDR camera pointed at the same scene. These will however not appear exactly the same on HDR and SDR displays. This is because of the different methods used for mapping signal to display in BT.1886 and BT.2100 HLG. The result of this is that shaders viewing an HLG signal or an SDR signal produced using a scene-light conversion might make slightly different choices, particular in regard to saturation.
+
+## Which mode to choose?
+![](images/grad_bar.png)
+
+A number of factors will influence the choice of scene or display light mode (when available) and there is no one correct choice for every scenario.
+
+When up-converting graphics created in SDR (often sRGB) to HLG for inclusion in an HDR transmission, a display light conversion is normally the most appropriate, in order to maintain the appearance of the graphics as they were seen on screen when created.
+
+Likewise when down-converting an HLG signal for SDR transmission, a display light conversion will create the best appearance match between the HDR and SDR streams.
+
+Cameras which are able to simultaneously produce SDR and HDR output often use scene light conversion[^1] (in part due to historical limitations in camera processing capabilities). If it is necessary to externally match an in-camera conversion, a scene light conversion is usually more appropriate.
+
+When converting a feed from an SDR only camera for inclusion in an HDR programme, a scene light conversion may be more appropriate, although the choice may be influenced by any processing in the SDR camera which alters the signal from being purely scene-referred.
+
+At the end of the day, thorough testing of the complete setup, including all the different sources and outputs is the only way to ascertain the most appropriate choices.
+
+[^1]: Some cameras may include separate processing in the HDR and SDR pathways which can alter the scene light relationship.
 
 ![](images/grad_bar.png)  
 
